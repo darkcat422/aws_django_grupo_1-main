@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.titulo }} | VetCommunity{% endblock %}
+
+{% block content %}
+
+<section class="post-detail-section">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+
+                <!-- VOLVER -->
+                <div class="mb-4">
+                    <a href="{% url 'lista_posts' %}" class="back-link">
+                        <i class="bi bi-arrow-left me-2"></i>
+                        Volver a publicaciones
+                    </a>
+                </div>
+
+                <!-- PUBLICACIÓN -->
+                <article class="post-detail-card">
+
+                    <!-- IMAGEN -->
+                    {% if post.imagen %}
+                    <div class="post-detail-image">
+                        <img src="{{ post.imagen.url }}" alt="{{ post.titulo }}">
+                    </div>
+                    {% else %}
+                    <div class="post-detail-image">
+                        <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1" alt="Mascotas">
+                    </div>
+                    {% endif %}
+
+                    <!-- CONTENIDO -->
+                    <div class="post-detail-content">
+
+                        <!-- CATEGORÍA -->
+                        {% if post.categoria %}
+                        <span class="category-badge">
+                            <i class="bi bi-tag-fill me-1"></i>
+                            {{ post.categoria }}
+                        </span>
+                        {% endif %}
+
+                        <!-- TÍTULO -->
+                        <h1 class="post-detail-title">
+                            {{ post.titulo }}
+                        </h1>
+
+                        <!-- DATOS DEL POST -->
+                        <div class="post-detail-meta">
+
+                            <!-- AUTOR -->
+                            <div class="post-author">
+                                <div class="author-avatar">
+                                    <i class="bi bi-person-fill"></i>
+                                </div>
+                                <div>
+                                    <small>Publicado por</small>
+                                    <strong>
+                                        {% if post.autor %}
+                                            {{ post.autor.username }}
+                                        {% else %}
+                                            Usuario
+                                        {% endif %}
+                                    </strong>
+                                </div>
+                            </div>
+
+                            <!-- FECHA (Usa fecha_publicacion que es el nombre en models.py) -->
+                            <div class="post-detail-date">
+                                <i class="bi bi-calendar3"></i>
+                                {{ post.fecha_publicacion|date:"d/m/Y" }}
+                            </div>
+
+                        </div>
+
+                        <!-- EXTRACTO -->
+                        {% if post.extracto %}
+                        <div class="post-extract">
+                            {{ post.extracto }}
+                        </div>
+                        {% endif %}
+
+                        <!-- TEXTO PRINCIPAL -->
+                        <div class="post-main-content">
+                            {{ post.contenido|linebreaks }}
+                        </div>
+
+                        <!-- BOTONES DEL AUTOR -->
+                        {% if user == post.autor %}
+                        <div class="post-owner-actions mt-4">
+                            {% if post.slug %}
+                            <a href="{% url 'editar_post' post.slug %}" class="btn btn-outline-vet me-2">
+                                <i class="bi bi-pencil-square me-2"></i> Editar publicación
+                            </a>
+                            <a href="{% url 'eliminar_post' post.slug %}" class="btn btn-outline-danger">
+                                <i class="bi bi-trash3 me-2"></i> Eliminar
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                    </div>
+
+                </article>
+
+                <!-- COMENTARIOS -->
+                <section class="comments-section mt-5">
+
+                    <div class="comments-header mb-4">
+                        <div>
+                            <span class="section-small-title">COMUNIDAD</span>
+                            <h3>
+                                <i class="bi bi-chat-dots me-2"></i> Comentarios
+                            </h3>
+                        </div>
+                    </div>
+
+                    <!-- LISTADO DE COMENTARIOS -->
+                    {% for comentario in comentarios %}
+
+                        <div class="comment-card mb-3 p-3 border rounded shadow-sm">
+                            <div class="d-flex align-items-start">
+                                <div class="comment-avatar me-3">
+                                    <i class="bi bi-person-circle fs-2"></i>
+                                </div>
+
+                                <div class="comment-content w-100">
+                                    <div class="comment-header d-flex justify-content-between align-items-center mb-2">
+                                        <strong>
+                                            {% if comentario.autor_usuario %}
+                                                {{ comentario.autor_usuario.username }}
+                                            {% else %}
+                                                {{ comentario.autor_nombre|default:"Anónimo" }}
+                                            {% endif %}
+                                        </strong>
+
+                                        {% if comentario.fecha %}
+                                        <span class="text-muted small">
+                                            <i class="bi bi-clock me-1"></i>
+                                            {{ comentario.fecha|date:"d/m/Y H:i" }}
+                                        </span>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Campo 'texto' definido en el modelo Comentario -->
+                                    <p class="mb-0">
+                                        {{ comentario.texto|linebreaksbr }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% empty %}
+
+                        <div class="no-comments text-center py-4 text-muted">
+                            <i class="bi bi-chat-heart fs-1"></i>
+                            <p class="mt-2">
+                                Todavía no hay comentarios. Sé el primero en participar.
+                            </p>
+                        </div>
+
+                    {% endfor %}
+
+                    <!-- FORMULARIO COMENTARIO -->
+                    {% if user.is_authenticated %}
+
+                    <div class="comment-form-card mt-4 p-4 border rounded">
+
+                        <div class="comment-form-title mb-3 d-flex align-items-center">
+                            <i class="bi bi-chat-square-text fs-3 me-2"></i>
+                            <div>
+                                <h5 class="mb-0">Deja un comentario</h5>
+                                <small class="text-muted">Comparte tu opinión con la comunidad.</small>
+                            </div>
+                        </div>
+
+                        <form method="post" action="">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                {{ form.as_p }}
+                            </div>
+
+                            <div class="text-end mt-3">
+                                <button
+                                    type="submit"
+                                    class="btn text-white fw-bold px-4 py-2"
+                                    style="background-color: #12715b;">
+                                    <i class="bi bi-send-fill me-2"></i> Publicar comentario
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="login-comment mt-4 p-4 text-center border rounded bg-light">
+                        <i class="bi bi-lock-fill fs-2 text-muted"></i>
+                        <div class="my-2">
+                            <strong>¿Quieres participar?</strong>
+                            <p class="mb-0 text-muted">Inicia sesión para dejar un comentario.</p>
+                        </div>
+                        <a href="{% url 'login' %}"
+                           class="btn text-white fw-bold px-4 py-2 mt-2"
+                           style="background-color: #12715b;">
+                            Iniciar sesión
+                        </a>
+                    </div>
+
+                    {% endif %}
+
+                </section>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

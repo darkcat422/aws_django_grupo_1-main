@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if editar %}Editar publicación{% else %}Nueva publicación{% endif %} | VetCommunity
+{% endblock %}
+
+{% block content %}
+
+<section class="create-post-section">
+
+    <div class="container py-5">
+
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+
+                <!-- ENCABEZADO -->
+                <div class="create-post-header mb-4">
+
+                    <div class="create-post-icon">
+                        <i class="bi bi-camera-fill"></i>
+                    </div>
+
+                    <div>
+                        <span class="section-small-title">
+                            VETCOMMUNITY
+                        </span>
+
+                        <h1>
+                            {% if editar %}
+                                Editar publicación
+                            {% else %}
+                                Crear nueva publicación
+                            {% endif %}
+                        </h1>
+
+                        <p>
+                            Comparte una historia, consejo, experiencia
+                            o fotografía de tu mascota.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <!-- TARJETA PRINCIPAL -->
+                <div class="create-post-card">
+
+                    <form method="post"
+                          enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+
+                        <!-- ERRORES -->
+                        {% if form.errors %}
+
+                        <div class="alert alert-danger mb-4">
+
+                            <i class="bi bi-exclamation-circle-fill me-2"></i>
+
+                            Revisa los datos del formulario antes de continuar.
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <!-- TÍTULO -->
+                        <div class="mb-4">
+
+                            <label for="{{ form.titulo.id_for_label }}"
+                                   class="form-label">
+
+                                <i class="bi bi-type me-2"></i>
+                                Título de la publicación
+
+                            </label>
+
+                            {{ form.titulo }}
+
+                            {% if form.titulo.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.titulo.errors }}
+                            </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- EXTRACTO -->
+                        {% if form.extracto %}
+
+                        <div class="mb-4">
+
+                            <label for="{{ form.extracto.id_for_label }}"
+                                   class="form-label">
+
+                                <i class="bi bi-card-text me-2"></i>
+                                Resumen
+
+                            </label>
+
+                            {{ form.extracto }}
+
+                            <div class="form-text">
+                                Escribe una breve descripción de tu publicación.
+                            </div>
+
+                            {% if form.extracto.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.extracto.errors }}
+                            </div>
+                            {% endif %}
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <!-- CONTENIDO -->
+                        <div class="mb-4">
+
+                            <label for="{{ form.contenido.id_for_label }}"
+                                   class="form-label">
+
+                                <i class="bi bi-pencil-square me-2"></i>
+                                Contenido
+
+                            </label>
+
+                            {{ form.contenido }}
+
+                            <div class="form-text">
+                                Cuenta tu experiencia o comparte información
+                                con la comunidad.
+                            </div>
+
+                            {% if form.contenido.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.contenido.errors }}
+                            </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- CATEGORÍA -->
+                        {% if form.categoria %}
+
+                        <div class="mb-4">
+
+                            <label for="{{ form.categoria.id_for_label }}"
+                                   class="form-label">
+
+                                <i class="bi bi-tag me-2"></i>
+                                Categoría
+
+                            </label>
+
+                            {{ form.categoria }}
+
+                            {% if form.categoria.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.categoria.errors }}
+                            </div>
+                            {% endif %}
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <!-- IMAGEN -->
+                        <div class="upload-area mb-4">
+
+                            <div class="upload-icon">
+                                <i class="bi bi-cloud-arrow-up"></i>
+                            </div>
+
+                            <div class="upload-text">
+
+                                <h5>Agregar fotografía</h5>
+
+                                <p>
+                                    Puedes acompañar tu publicación con
+                                    una imagen de tu mascota.
+                                </p>
+
+                                {{ form.imagen }}
+
+                                {% if form.imagen.errors %}
+                                <div class="text-danger small mt-2">
+                                    {{ form.imagen.errors }}
+                                </div>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- IMAGEN ACTUAL AL EDITAR -->
+                        {% if editar and post.imagen %}
+
+                        <div class="current-image mb-4">
+
+                            <p class="fw-semibold">
+                                Imagen actual:
+                            </p>
+
+                            <img src="{{ post.imagen.url }}"
+                                 alt="{{ post.titulo }}">
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <!-- INFORMACIÓN -->
+                        <div class="publication-info mb-4">
+
+                            <i class="bi bi-info-circle-fill"></i>
+
+                            <div>
+                                <strong>
+                                    Antes de publicar
+                                </strong>
+
+                                <p>
+                                    Revisa que el título, contenido e imagen
+                                    correspondan a lo que deseas compartir.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <!-- BOTONES -->
+                        <div class="create-post-actions">
+
+                            <a href="{% url 'lista_posts' %}"
+                               class="btn btn-outline-secondary">
+
+                                <i class="bi bi-arrow-left me-2"></i>
+                                Cancelar
+
+                            </a>
+
+
+                            <button type="submit" class="btn text-white fw-bold px-4 py-2" style="background-color: #12715b;">
+                                {% if editar %}
+                                    <i class="bi bi-check-circle me-2"></i>
+                                    Guardar cambios
+                                {% else %}
+                                    <i class="bi bi-send-fill me-2"></i>
+                                    Publicar
+                                {% endif %}
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,432 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio | VetCommunity{% endblock %}
+
+{% block content %}
+
+<!-- =========================
+     HERO PRINCIPAL
+========================= -->
+<section class="hero-section">
+
+    <div class="container">
+
+        <div class="row align-items-center min-vh-75">
+
+            <!-- TEXTO -->
+            <div class="col-lg-6">
+
+                <span class="hero-badge">
+                    <i class="bi bi-heart-pulse-fill me-2"></i>
+                    COMUNIDAD VETERINARIA
+                </span>
+
+                <h1 class="hero-title">
+                    Todo por quienes
+                    <span>llenan nuestra vida</span>
+                </h1>
+
+                <p class="hero-description">
+                    Un espacio para compartir historias, experiencias,
+                    consejos y momentos especiales junto a nuestras mascotas.
+                </p>
+
+
+                <div class="hero-buttons">
+
+                    <a href="{% url 'lista_posts' %}" class="btn btn-lg text-white fw-bold" style="background-color: #12715b;">
+                        <i class="bi bi-journal-heart me-2"></i>
+                        Ver publicaciones
+                    </a>
+
+
+                    {% if user.is_authenticated %}
+
+                    <a href="{% url 'crear_post' %}"
+                       class="btn btn-outline-vet btn-lg">
+
+                        <i class="bi bi-plus-circle me-2"></i>
+                        Crear publicación
+
+                    </a>
+
+                    {% else %}
+
+                    <a href="{% url 'signup' %}"
+                       class="btn btn-outline-vet btn-lg">
+
+                        <i class="bi bi-person-plus me-2"></i>
+                        Únete a la comunidad
+
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ESTADÍSTICAS DECORATIVAS -->
+                <div class="hero-features">
+
+                    <div>
+                        <i class="bi bi-people-fill"></i>
+
+                        <span>
+                            <strong>Comunidad</strong>
+                            Amantes de mascotas
+                        </span>
+                    </div>
+
+
+                    <div>
+                        <i class="bi bi-chat-heart-fill"></i>
+
+                        <span>
+                            <strong>Experiencias</strong>
+                            Historias compartidas
+                        </span>
+                    </div>
+
+
+                    <div>
+                        <i class="bi bi-shield-check"></i>
+
+                        <span>
+                            <strong>Consejos</strong>
+                            Cuidado responsable
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- IMAGEN -->
+            <div class="col-lg-6 mt-5 mt-lg-0">
+
+                <div class="hero-image-wrapper">
+
+                    <!-- PUEDES CAMBIAR ESTA URL DESPUÉS -->
+                    <img
+                        src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1"
+                        alt="Mascotas"
+                        class="hero-main-image">
+
+
+                    <!-- TARJETA FLOTANTE -->
+                    <div class="hero-floating-card">
+
+                        <div class="floating-icon">
+                            <i class="bi bi-heart-fill"></i>
+                        </div>
+
+                        <div>
+                            <strong>
+                                Cuidarlos es quererlos
+                            </strong>
+
+                            <span>
+                                Comparte y aprende
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     SOBRE LA COMUNIDAD
+========================= -->
+<section class="home-about">
+
+    <div class="container">
+
+        <div class="text-center section-heading">
+
+            <span class="section-small-title">
+                VETCOMMUNITY
+            </span>
+
+            <h2>
+                Una comunidad para ellos
+            </h2>
+
+            <p>
+                Comparte conocimientos y experiencias con otras
+                personas que también aman y cuidan a sus mascotas.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4 mt-3">
+
+
+            <!-- TARJETA 1 -->
+            <div class="col-md-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="bi bi-camera-fill"></i>
+                    </div>
+
+                    <h4>
+                        Comparte momentos
+                    </h4>
+
+                    <p>
+                        Publica fotografías e historias de tus mascotas
+                        y comparte sus mejores momentos.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- TARJETA 2 -->
+            <div class="col-md-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="bi bi-chat-heart-fill"></i>
+                    </div>
+
+                    <h4>
+                        Comparte experiencias
+                    </h4>
+
+                    <p>
+                        Cuenta tus experiencias y participa en las
+                        publicaciones de otros miembros.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- TARJETA 3 -->
+            <div class="col-md-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="bi bi-lightbulb-fill"></i>
+                    </div>
+
+                    <h4>
+                        Aprende en comunidad
+                    </h4>
+
+                    <p>
+                        Encuentra consejos e información compartida
+                        por personas que también cuidan mascotas.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     IMAGEN + INFORMACIÓN
+========================= -->
+<section class="home-info">
+
+    <div class="container">
+
+        <div class="row align-items-center g-5">
+
+
+            <!-- IMAGEN -->
+            <div class="col-lg-6">
+
+                <div class="home-info-image">
+
+                    <!-- PUEDES CAMBIAR ESTA URL -->
+                    <img
+                        src="https://images.unsplash.com/photo-1576201836106-db1758fd1c97"
+                        alt="Veterinario con mascota">
+
+                </div>
+
+            </div>
+
+
+            <!-- INFORMACIÓN -->
+            <div class="col-lg-6">
+
+                <span class="section-small-title">
+                    NUESTRA COMUNIDAD
+                </span>
+
+                <h2>
+                    Porque cada mascota tiene una historia
+                </h2>
+
+                <p class="home-info-text">
+                    VetCommunity nace como un espacio donde los amantes
+                    de los animales pueden compartir sus experiencias,
+                    fotografías y conocimientos.
+                </p>
+
+
+                <div class="info-item">
+
+                    <div class="info-icon">
+                        <i class="bi bi-check-lg"></i>
+                    </div>
+
+                    <div>
+                        <strong>
+                            Comparte contenido
+                        </strong>
+
+                        <p>
+                            Publica historias, fotografías y experiencias.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-icon">
+                        <i class="bi bi-check-lg"></i>
+                    </div>
+
+                    <div>
+                        <strong>
+                            Participa
+                        </strong>
+
+                        <p>
+                            Comenta las publicaciones de otros usuarios.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-icon">
+                        <i class="bi bi-check-lg"></i>
+                    </div>
+
+                    <div>
+                        <strong>
+                            Forma parte de la comunidad
+                        </strong>
+
+                        <p>
+                            Crea tu cuenta y comienza a compartir.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <a href="{% url 'lista_posts' %}"
+                   class="btn btn-vet mt-3">
+
+                    Explorar publicaciones
+
+                    <i class="bi bi-arrow-right ms-2"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     LLAMADO FINAL
+========================= -->
+<section class="home-cta">
+
+    <div class="container">
+
+        <div class="cta-card">
+
+            <div class="cta-icon">
+                <i class="bi bi-heart-pulse-fill"></i>
+            </div>
+
+
+            {% if user.is_authenticated %}
+
+            <h2>
+                ¿Tienes algo que compartir?
+            </h2>
+
+            <p>
+                Publica una historia, experiencia o fotografía
+                de tu mascota.
+            </p>
+
+            <a href="{% url 'crear_post' %}"
+               class="btn btn-light btn-lg">
+
+                <i class="bi bi-plus-circle me-2"></i>
+                Crear publicación
+
+            </a>
+
+
+            {% else %}
+
+            <h2>
+                Forma parte de VetCommunity
+            </h2>
+
+            <p>
+                Crea tu cuenta y comienza a compartir tus
+                experiencias con la comunidad.
+            </p>
+
+            <a href="{% url 'signup' %}"
+               class="btn btn-light btn-lg">
+
+                <i class="bi bi-person-plus me-2"></i>
+                Crear cuenta
+
+            </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

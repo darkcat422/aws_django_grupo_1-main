@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card p-4 shadow-sm">
+    <!--perfil del usuario nombre-->
+    <h2 class="fw-bold">Perfil de {{ perfil.usuario.username }}</h2>
+    <hr>
+    <!--el admin debe asignarle una biografía al perfil de usuario-->
+    <p><strong>Biografía:</strong></p>
+    <p>{{ perfil.biografia|default:"Este usuario no tiene biografía aún." }}</p>
+
+    <p class="text-muted mt-3">
+        <!--fecha de registro del perfil del usuario cuando la cuenta de registra se crea una fecha propia-->
+        Registrado el: {{ perfil.fecha_registro|date:"d/m/Y H:i" }}
+    </p>
+
+</div>
+{% endblock %}

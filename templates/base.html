@@ -1,0 +1,589 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}VetCommunity{% endblock %}
+    </title>
+
+
+    <!-- BOOTSTRAP -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+
+    <!-- BOOTSTRAP ICONS -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+    <!-- CSS DEL PROYECTO -->
+    <link
+        rel="stylesheet"
+        href="{% static 'css/style.css' %}">
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     NAVBAR
+========================================= -->
+
+<nav class="navbar navbar-expand-lg navbar-vet sticky-top">
+
+    <div class="container">
+
+
+        <!-- LOGO -->
+        <a class="navbar-brand vet-brand"
+           href="{% url 'home' %}">
+
+            <span class="brand-icon">
+                <i class="bi bi-heart-pulse-fill"></i>
+            </span>
+
+            <span class="brand-text">
+                Vet<span>Community</span>
+            </span>
+
+        </a>
+
+
+        <!-- BOTÓN CELULAR -->
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarVet"
+            aria-controls="navbarVet"
+            aria-expanded="false"
+            aria-label="Abrir menú">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+
+        <!-- MENÚ -->
+        <div
+            class="collapse navbar-collapse"
+            id="navbarVet">
+
+
+            <!-- IZQUIERDA -->
+            <ul class="navbar-nav ms-lg-5 me-auto mb-2 mb-lg-0">
+
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       href="{% url 'home' %}">
+
+                        <i class="bi bi-house-door me-1"></i>
+                        Inicio
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       href="{% url 'lista_posts' %}">
+
+                        <i class="bi bi-journal-heart me-1"></i>
+                        Publicaciones
+
+                    </a>
+
+                </li>
+
+
+                {% if user.is_authenticated %}
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       href="{% url 'crear_post' %}">
+
+                        <i class="bi bi-plus-circle me-1"></i>
+                        Publicar
+
+                    </a>
+
+                </li>
+
+                {% endif %}
+
+
+            </ul>
+
+
+
+            <!-- DERECHA -->
+            <div class="navbar-user-area">
+
+
+                {% if user.is_authenticated %}
+
+
+                <!-- USUARIO -->
+                <div class="dropdown">
+
+                    <button
+                        class="user-dropdown"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+
+
+                        <span class="navbar-avatar">
+
+                            <i class="bi bi-person-fill"></i>
+
+                        </span>
+
+
+                        <span class="navbar-user-info">
+
+                            <small>
+                                Bienvenido
+                            </small>
+
+                            <strong>
+                                {{ user.username }}
+                            </strong>
+
+                        </span>
+
+
+                        <i class="bi bi-chevron-down ms-2"></i>
+
+                    </button>
+
+
+
+                    <!-- MENÚ USUARIO -->
+                    <ul class="dropdown-menu dropdown-menu-end vet-dropdown">
+
+
+                        <!-- PERFIL -->
+                        <li>
+
+                            <a
+                                class="dropdown-item"
+                                href="{% url 'perfil_usuario' %}">
+
+                                <i class="bi bi-person-circle"></i>
+
+                                Mi perfil
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- CREAR POST -->
+                        <li>
+
+                            <a
+                                class="dropdown-item"
+                                href="{% url 'crear_post' %}">
+
+                                <i class="bi bi-plus-square"></i>
+
+                                Nueva publicación
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+
+                        <!-- CERRAR SESIÓN -->
+                        <li>
+
+                            <form
+                                method="post"
+                                action="{% url 'logout' %}">
+
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="dropdown-item logout-item">
+
+                                    <i class="bi bi-box-arrow-right"></i>
+
+                                    Cerrar sesión
+
+                                </button>
+
+                            </form>
+
+                        </li>
+
+
+                    </ul>
+
+                </div>
+
+
+                {% else %}
+
+
+                <!-- LOGIN -->
+                <a
+                    href="{% url 'login' %}"
+                    class="navbar-login">
+
+                    Iniciar sesión
+
+                </a>
+
+
+                <!-- REGISTRO -->
+                <a
+                    href="{% url 'signup' %}"
+                    class="btn btn-vet navbar-register">
+
+                    <i class="bi bi-person-plus me-1"></i>
+
+                    Registrarse
+
+                </a>
+
+
+                {% endif %}
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================================
+     MENSAJES DJANGO
+========================================= -->
+
+{% if messages %}
+
+<div class="container messages-container">
+
+    {% for message in messages %}
+
+    <div
+        class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show"
+        role="alert">
+
+        <i class="bi bi-info-circle-fill me-2"></i>
+
+        {{ message }}
+
+
+        <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Cerrar">
+
+        </button>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+
+
+<!-- =========================================
+     CONTENIDO DE CADA PÁGINA
+========================================= -->
+
+<main>
+
+    {% block content %}
+
+    {% endblock %}
+
+</main>
+
+
+
+<!-- =========================================
+     FOOTER
+========================================= -->
+
+<footer class="footer-vet">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+
+            <!-- LOGO Y DESCRIPCIÓN -->
+            <div class="col-lg-5">
+
+                <div class="footer-brand">
+
+                    <span class="brand-icon">
+
+                        <i class="bi bi-heart-pulse-fill"></i>
+
+                    </span>
+
+
+                    <span class="brand-text">
+
+                        Vet<span>Community</span>
+
+                    </span>
+
+                </div>
+
+
+                <p class="footer-description">
+
+                    Una comunidad creada para compartir historias,
+                    experiencias y momentos especiales junto a
+                    nuestras mascotas.
+
+                </p>
+
+
+                <div class="footer-social">
+
+                    <a href="#"
+                       aria-label="Instagram">
+
+                        <i class="bi bi-instagram"></i>
+
+                    </a>
+
+
+                    <a href="#"
+                       aria-label="Facebook">
+
+                        <i class="bi bi-facebook"></i>
+
+                    </a>
+
+
+                    <a href="#"
+                       aria-label="Twitter">
+
+                        <i class="bi bi-twitter-x"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- NAVEGACIÓN -->
+            <div class="col-6 col-lg-3">
+
+                <h5>
+                    Navegación
+                </h5>
+
+
+                <ul class="footer-links">
+
+                    <li>
+
+                        <a href="{% url 'home' %}">
+
+                            Inicio
+
+                        </a>
+
+                    </li>
+
+
+                    <li>
+
+                        <a href="{% url 'lista_posts' %}">
+
+                            Publicaciones
+
+                        </a>
+
+                    </li>
+
+
+                    {% if user.is_authenticated %}
+
+                    <li>
+
+                        <a href="{% url 'crear_post' %}">
+
+                            Crear publicación
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+                </ul>
+
+            </div>
+
+
+
+            <!-- CUENTA -->
+            <div class="col-6 col-lg-3">
+
+                <h5>
+                    Mi cuenta
+                </h5>
+
+
+                <ul class="footer-links">
+
+
+                    {% if user.is_authenticated %}
+
+                    <li>
+
+                        <a href="{% url 'perfil_usuario' %}">
+
+                            Mi perfil
+
+                        </a>
+
+                    </li>
+
+
+                    <li>
+
+                        <form
+                            method="post"
+                            action="{% url 'logout' %}">
+
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                class="footer-logout">
+
+                                Cerrar sesión
+
+                            </button>
+
+                        </form>
+
+                    </li>
+
+
+                    {% else %}
+
+
+                    <li>
+
+                        <a href="{% url 'login' %}">
+
+                            Iniciar sesión
+
+                        </a>
+
+                    </li>
+
+
+                    <li>
+
+                        <a href="{% url 'signup' %}">
+
+                            Registrarse
+
+                        </a>
+
+                    </li>
+
+
+                    {% endif %}
+
+
+                </ul>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PARTE INFERIOR -->
+
+        <div class="footer-bottom">
+
+            <span>
+
+                © {% now "Y" %} VetCommunity
+
+            </span>
+
+
+            <span>
+
+                Hecho con
+
+                <i class="bi bi-heart-fill"></i>
+
+                para los amantes de los animales.
+
+            </span>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =========================================
+     BOOTSTRAP JS
+========================================= -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+{% block scripts %}
+
+{% endblock %}
+
+
+</body>
+
+</html>

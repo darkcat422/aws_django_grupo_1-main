@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Crear cuenta | VetCommunity{% endblock %}
+
+{% block content %}
+
+{% static 'img/signupimg.jpg' as bg_img %}
+
+<section class="auth-section py-5">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-10">
+
+                <div class="auth-card overflow-hidden">
+                    <div class="row g-0">
+
+                        <!-- IMAGEN LATERAL -->
+                        <div class="col-lg-5 d-none d-lg-flex flex-column justify-content-center p-5 text-white position-relative"
+                             style="background: linear-gradient(rgba(18, 113, 91, 0.45), rgba(18, 113, 91, 0.75)), url('{{ bg_img }}') center / cover no-repeat; min-height: 550px;">
+
+                            <div class="auth-image-content text-center position-relative" style="z-index: 2;">
+                                <i class="bi bi-heart-pulse-fill auth-big-icon display-1 mb-3"></i>
+                                <h2 class="fw-bold mb-3">Únete a VetCommunity</h2>
+                                <p class="lead fs-6 mb-0">
+                                    Crea tu cuenta y comparte experiencias,
+                                    fotografías e información sobre tus mascotas.
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <!-- FORMULARIO -->
+                        <div class="col-lg-7">
+                            <div class="auth-form p-4 p-md-5">
+
+                                <div class="auth-logo text-center mb-3">
+                                    <i class="bi bi-person-plus-fill fs-1"></i>
+                                </div>
+
+                                <h2 class="text-center fw-bold">Crear una cuenta</h2>
+                                <p class="text-muted text-center mb-4">
+                                    Completa tus datos para registrarte.
+                                </p>
+
+                                <!-- ERRORES GLOBALES -->
+                                {% if form.errors %}
+                                <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+                                    <i class="bi bi-exclamation-circle-fill me-2 fs-5"></i>
+                                    <div>
+                                        Por favor, revisa los datos ingresados en el formulario.
+                                        {% if form.non_field_errors %}
+                                            {% for error in form.non_field_errors %}
+                                                <div class="small text-danger mt-1">{{ error }}</div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                <!-- FORMULARIO CON PREVENCIÓN DE DOBLE ENVÍO -->
+                                <form method="post" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
+                                    {% csrf_token %}
+
+                                    <!-- USUARIO -->
+                                    <div class="mb-3">
+                                        <label for="id_username" class="form-label fw-semibold">
+                                            <i class="bi bi-person me-1"></i>
+                                            Nombre de usuario
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="username"
+                                            id="id_username"
+                                            class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+                                            placeholder="Crea un nombre de usuario"
+                                            value="{{ form.username.value|default:'' }}"
+                                            required>
+                                        {% if form.username.errors %}
+                                            {% for error in form.username.errors %}
+                                                <div class="text-danger small mt-1">{{ error }}</div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- CONTRASEÑA -->
+                                    <div class="mb-3">
+                                        <label for="id_password1" class="form-label fw-semibold">
+                                            <i class="bi bi-lock me-1"></i>
+                                            Contraseña
+                                        </label>
+                                        <input
+                                            type="password"
+                                            name="password1"
+                                            id="id_password1"
+                                            class="form-control {% if form.password1.errors %}is-invalid{% endif %}"
+                                            placeholder="Crea una contraseña"
+                                            required>
+                                        {% if form.password1.errors %}
+                                            {% for error in form.password1.errors %}
+                                                <div class="text-danger small mt-1">{{ error }}</div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- CONFIRMAR CONTRASEÑA -->
+                                    <div class="mb-3">
+                                        <label for="id_password2" class="form-label fw-semibold">
+                                            <i class="bi bi-shield-lock me-1"></i>
+                                            Confirmar contraseña
+                                        </label>
+                                        <input
+                                            type="password"
+                                            name="password2"
+                                            id="id_password2"
+                                            class="form-control {% if form.password2.errors %}is-invalid{% endif %}"
+                                            placeholder="Repite tu contraseña"
+                                            required>
+                                        {% if form.password2.errors %}
+                                            {% for error in form.password2.errors %}
+                                                <div class="text-danger small mt-1">{{ error }}</div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- AYUDA -->
+                                    <div class="password-info alert alert-light border d-flex align-items-start mt-3 mb-4 p-3 rounded">
+                                        <i class="bi bi-info-circle text-success me-2 fs-5 mt-1"></i>
+                                        <div>
+                                            <strong class="d-block mb-1">Recuerda</strong>
+                                            <p class="mb-0 small text-muted">
+                                                Utiliza una contraseña segura y evita usar información fácil de adivinar.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- BOTÓN REGISTRO -->
+                                    <button type="submit" class="btn w-100 py-2 fw-bold text-white" style="background-color: #12715b;">
+                                        <i class="bi bi-person-check me-2"></i>
+                                        Crear mi cuenta
+                                    </button>
+                                </form>
+
+                                <!-- LOGIN -->
+                                <div class="auth-register text-center mt-4">
+                                    <span class="text-muted">¿Ya tienes una cuenta?</span>
+                                    <a href="{% url 'login' %}" class="fw-bold ms-1">Iniciar sesión</a>
+                                </div>
+
+                                <!-- VOLVER -->
+                                <div class="text-center mt-3">
+                                    <a href="{% url 'home' %}" class="text-muted text-decoration-none small">
+                                        <i class="bi bi-arrow-left me-1"></i>
+                                        Volver al inicio
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
